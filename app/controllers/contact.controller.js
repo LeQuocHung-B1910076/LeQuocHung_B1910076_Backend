@@ -23,6 +23,23 @@ exports.deleteAll = (req, res) =>{
 exports.findAllFavorite = (req, res) =>{
     res.send({message: "findAllFavorite handler"});
 };
+
+exports.create = async(req,res,next) =>{
+    if(!req.body?.name){
+        return next(new ApiError(400,"Name can not be empty"));
+    }
+
+    try{
+        const contactService = new ContactService(MongoDB.client);
+        const document = await contactService.create(req.body);
+        return res.send(document);
+    } catch (error){
+        return next(
+            new ApiError(500,"An occurred while creating the contact")
+        );
+    }
+};
+
 exports.findAll = async(req, res, next)=>{
     let documents = [];
     try{
@@ -40,6 +57,7 @@ exports.findAll = async(req, res, next)=>{
     }
     return res.send(documents);
 };
+
 exports.findOne = async(req,res,next)=>{
     try{
         const contactService = new ContactService(MongoDB.client);
@@ -54,6 +72,7 @@ exports.findOne = async(req,res,next)=>{
         );
     }
 };
+
 exports.update = async(req,res,next)=>{
     if(Object.keys(req.body).length ==0){
         return next(new ApiError(400,"Data to update can not be empty"));
@@ -71,6 +90,7 @@ exports.update = async(req,res,next)=>{
         );
     }
 };
+
 exports.delete = async(req,res,next)=>{
     try{
         const contactService = new ContactService(MongoDB.client);
@@ -85,6 +105,7 @@ exports.delete = async(req,res,next)=>{
         );
     }
 };
+
 exports.findAllFavorite = async(_req,res,next)=>{
     try{
         const contactService = new ContactService(MongoDB.client);
@@ -96,6 +117,7 @@ exports.findAllFavorite = async(_req,res,next)=>{
         );
     }
 };
+
 exports.deleteAll = async(_req,res,next)=>{
     try{
         const contactService = new ContactService(MongoDB.client);
@@ -104,24 +126,6 @@ exports.deleteAll = async(_req,res,next)=>{
     }catch (error){
         return next(
             new ApiError(500, "An error occurred while retrieving contacts")
-        );
-    }
-};
-
-
-//tạo và lưu trữ 1 contact mới
-exports.create = async(req,res,next) =>{
-    if(!req.body?.name){
-        return next(new ApiError(400,"Name can not be empty"));
-    }
-
-    try{
-        const contactService = new ContactService(MongoDB.client);
-        const document = await contactService.create(req.body);
-        return res.send(document);
-    } catch (error){
-        return next(
-            new ApiError(500,"An occurred while creating the contact")
         );
     }
 };
