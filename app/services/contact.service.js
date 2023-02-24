@@ -12,7 +12,7 @@ class ContactService{
             phone: payload.phone,
             favorite: payload.favorite,
         };
-        Objects.keys(contact).forEach(
+        Object.keys(contact).forEach(
             (key) => contact[key] === undefined && delete contact[key]
         );
         return contact;
@@ -66,7 +66,7 @@ class ContactService{
     }
 
     async findFavorite(){
-        return await this.find({favorite: true});
+        return await this.find({favorite: true });
     }
 
     async deleteAll(){
